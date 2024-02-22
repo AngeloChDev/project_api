@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'dj_rest_auth',
     'dj_rest_auth.registration',
-    'mainAPI.apps.MainapiConfig'
+    'mainAPI.apps.MainapiConfig',
+    'auto_shop.apps.AutoShopConfig'
 ]
 
 MIDDLEWARE = [
