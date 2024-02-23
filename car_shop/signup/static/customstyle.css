@@ -1,0 +1,20 @@
+head{
+    background-color: brown;
+    color: whitesmoke;
+}
+body{
+    background-color:rgb(219, 159, 106);
+}
+
+h1{
+    color : rgba(205, 7, 7, 0.998);
+    
+}
+
+h2{
+    color : rgb(11, 52, 139)
+}
+
+li{
+    color : rgb(248, 242, 242)
+}

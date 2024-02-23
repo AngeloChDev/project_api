@@ -1,0 +1,106 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f5f5f5; /* Light grey background */
+    color: #333333; /* Dark grey text color */
+    margin: 0;
+    padding: 0;
+}
+
+/* Header styles */
+header {
+    background-color: #1abc9c; /* Turquoise header background */
+    padding: 20px;
+    text-align: center;
+    color: white; /* White text color */
+    border-top-left-radius: 20px; /* Rounded corners */
+    border-top-right-radius: 20px; /* Rounded corners */
+    margin-bottom: 20px; /* Add space between header and other sections */
+}
+
+.header-links {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.header-link {
+    text-decoration: none;
+    padding: 10px 20px;
+    background-color: #16a085; /* Slightly darker color than header */
+    border-radius: 20px; /* Rounded corners */
+    margin: 0 10px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.header-link:hover {
+    background-color: #9b59b6; /* Dark violet background on hover */
+    color: white;
+}
+
+/* Navigation styles */
+nav {
+    background-color: #ffffff; /* White navigation background */
+    padding: 10px;
+    width: 20%; /* 20% of the viewport width */
+    min-height: 100vh; /* Set minimum height to 100% of viewport height */
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+nav ul li {
+    margin-bottom: 10px; /* Add space between navigation items */
+}
+
+nav ul li a {
+    color: #333333; /* Dark grey text color */
+    text-decoration: none;
+    font-weight: bold;
+    padding: 5px 10px; /* Padding for the link */
+    border: 2px solid #1abcb4; /* Turquoise border */
+    border-radius: 5px; /* Rounded corners */
+    display: block; /* Make the links block elements */
+    transition: color 0.3s, background-color 0.3s, border-color 0.3s; /* Smooth transition effect */
+}
+
+nav ul li a:hover {
+    color: #9b59b6; /* Dark violet text color on hover */
+    background-color: #1abc9c; /* Turquoise background on hover */
+    border-color: #9b59b6; /* Dark violet border on hover */
+}
+
+/* Main content styles */
+section {
+    display: flex; /* Use flexbox to align navigation and main content */
+}
+
+.main-content {
+    background-color: #dddddd; /* Light grey middle part */
+    padding: 20px;
+    flex-grow: 1; /* Allow main content to grow and take remaining space */
+    min-height: 100vh; /* Set minimum height to 100% of viewport height */
+}
+
+/* Sidebar styles */
+.sidebar {
+    background-color: #ffffff; /* White sidebar background */
+    padding: 10px;
+    width: 20%; /* 20% of the viewport width */
+    min-height: 100vh; /* Set minimum height to 100% of viewport height */
+    float: right; /* Float the sidebar to the right */
+}
+
+/* Footer styles */
+footer {
+    background-color: #1abc9c; /* Turquoise footer background */
+    padding: 10px;
+    text-align: center;
+    color: white; /* White text color */
+}

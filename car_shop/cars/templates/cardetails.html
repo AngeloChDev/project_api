@@ -1,0 +1,22 @@
+{% extends "base_shop.html" %}
+
+{% block content %}
+    <h1>{{ car.manufacturer }}</h1>
+    <p>Model: {{ car.model }}</p>
+    <p>Year: {{ car.year }}</p>
+    <p>Color: {{ car.color }}</p>
+    <p>Price: {{ car.price }}</p>
+    <p>Mileage: {{ car.mileage }}</p>
+    <p>image: {{ car.image }}</p>
+    <p>Created at: {{ car.created_at }}</p>
+
+    <form method="post" action="{% url 'cardetails' car_id=car.id %}">
+        {% csrf_token %}
+        <input type="hidden" name="car_id" value="{{ car.id }}">
+        <label for="quantity">Quantity:</label>
+        <input type="number" name="quantity" id="quantity" value="1" min="1"><br>
+        <input type="submit" value="Place Order">
+    </form>
+    
+{% endblock %}
+

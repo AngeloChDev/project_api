@@ -1,0 +1,14 @@
+{% extends "base_shop.html" %}
+{% block content %}
+    <h1>Our Cars</h1>
+    <p>Number of autos: {{ autos|length }}</p>  {# Debug line added here #}
+    <p>These cars are for sale:</p>
+    <ul class="product-list">
+        {% for auto in autos %}
+            <li class="product-item">
+                <strong>Brand:</strong> {{ auto.fields.brand }}<br>
+                <strong>Price:</strong> {{ auto.fields.price }}<br>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends "base_shop.html" %}
+{% load static %}
+{% block content %}
+<title>Our Shop</title>
+<body class="shop-page">
+<h1>This is our shop</h1>
+<h2>You find all the cars in the Cars List:</h2>
+<ul style="list-style-type: none; padding: 0;">
+    <li style="background-color: #f1f1f1; padding: 10px; border-radius: 5px;">
+        <a href="{% url 'cars:cars' %}" style="color: #1880a0; text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='darkviolet'" onmouseout="this.style.color='#1880a0'">Car List</a>
+            <!-- Image -->
+        <img src="{% static 'auto_medium.jpg' %}" alt="Auto" style="max-width: 100%; height: auto;">
+    </li>
+</ul>
+</body> 
+{% endblock content %}
