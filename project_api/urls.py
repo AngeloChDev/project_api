@@ -1,5 +1,5 @@
 """
-URL configuration for projectAPI project.
+URL configuration for project_api project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.0/topics/http/urls/
@@ -20,6 +20,11 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("", include("auto_shop.urls")),
+    path("", include("mainAPI.urls")),
+    path('api-auth/', include('rest_framework.urls')),
+    path("api/dj-rest-auth/", include("dj_rest_auth.urls")),
+    path(
+        "api/dj-rest-auth/registration/", include("dj_rest_auth.registration.urls")
+    ),
     #path("api/", include("mainAPI.urls")),
-]
+] 
