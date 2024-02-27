@@ -5,10 +5,21 @@
     <p>These cars are for sale:</p>
     <ul class="product-list">
         {% for auto in autos %}
-            <li class="product-item">
-                <strong>Brand:</strong> {{ auto.fields.brand }}<br>
-                <strong>Price:</strong> {{ auto.fields.price }}<br>
-            </li>
+        <li class="product-item">
+            <strong>Brand:</strong>  {{ auto.fields.brand }}<br>
+            <strong>Price:</strong>  {{ auto.fields.price }}<br>
+
+        </li>
+        
         {% endfor %}
     </ul>
 {% endblock %}
+
+<!-- 
+<li class="product-item">
+    <a href="{% url 'cars:cardetails' auto.id %}" class="product-link">
+        {{ car.fields.brand }}
+        <br>
+        {{ car.fields.price }}
+    </a>
+</li> -->

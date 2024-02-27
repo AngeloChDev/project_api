@@ -5,6 +5,6 @@ app_name="cars"
 urlpatterns = [
     path("home/", cars_homepage, name="cars_homepage"),
     path("cars/", cars, name="cars"),
-    path("cars/<int:auto_pk>/", cardetails, name="cardetails"),
+    path("cars/<int:auto_id>/", cardetails, name="cardetails"),
     path('order-success/', order_success, name='order_success'),
     ]
