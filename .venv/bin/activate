@@ -35,7 +35,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/home/dci-student/CORSO/project_api/.venv"
+VIRTUAL_ENV="/home/dci-student/CORSO/api2/api/.venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
