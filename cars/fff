@@ -1,5 +1,0 @@
-sudo dpkg -i ./containerd.io_4.28.0_arm64.deb \
-  ./docker-ce_4.28.0_arm64.deb \
-  ./docker-ce-cli_4.28.0_arm64.deb \
-  ./docker-buildx-plugin_4.28.0_arm64.deb \
-  ./docker-compose-plugin_4.28.0_arm64.deb

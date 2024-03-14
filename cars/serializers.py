@@ -31,14 +31,4 @@ class OrderSerializer(serializers.ModelSerializer):
                   "id_user",
             ]
 
-      #def __init__(self, instance=None, data=..., **kwargs):
-      #      super().__init__(instance, data, **kwargs)
-#
-      #def is_valid(self):
-      #      if zip("id_car" , "id_user") in self.data.keys():
-      #            if Car.objects.get(pk=self.data["id_car"]):
-      #                  users=  get_user_model()
-      #                  user= users.filter(pk= self.data["id_user"])
-      #                  if user.is_authenticated and users.is_active:
-      #                        return True
-      #      return False
+  

@@ -11,65 +11,69 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.response import Response
 from rest_framework.status import HTTP_202_ACCEPTED,HTTP_404_NOT_FOUND,HTTP_201_CREATED,HTTP_200_OK,HTTP_401_UNAUTHORIZED,HTTP_400_BAD_REQUEST
-from django.contrib.auth import get_user_model
-from django.shortcuts import get_object_or_404
-from .permission import UsersPermission
-from django.http import HttpRequest
-from requests import request, Request 
-import json
+
 
 
 class GenericUsersViewSet(ModelViewSet):
       queryset = GuestUser.objects.all()
       serializer_class = GuestUserSerializer
 
-      def create(self, request,username,password,*args, **kwargs):
-            form=GuestUserForm
+      @permission_classes(AllowAny)
+      def create(self, request,*args, **kwargs):
+            data=request.resolver_match.kwargs
             try:
-                  data=request.resolver_match.kwargs
                   k, s = data.keys(), self.serializer_class(data=data)
-                  if all(("username" in k, "password" in k, s.is_valid())) :
+                  if all(("username" in k, "password" in k, s.is_valid() )) :
                         user=self.serializer_class().create(data)
                         user.save()
                         return Response({"Success":"New user created, please save your details","Detail":s.data},status=HTTP_201_CREATED)
                   raise ValueError("Url  didnot contain right data")
                         
             except ValueError as e:
-                  print(e)
-                  return Response(None,status=HTTP_401_UNAUTHORIZED) 
+                  return Response({"Response":{"message":f"Error {e} \non load details","data":data}},status=HTTP_401_UNAUTHORIZED) 
 
-      
-      def retrieve(self, request,username,password, *args, **kwargs):
+      @permission_classes(AllowAny)
+      def retrieve(self, request, *args, **kwargs):
             data =request.resolver_match.kwargs
-            k, s = data.keys(), self.serializer_class(data=data)
-            s.is_valid()
-            if all(("username" in k, "password" in k, s.get_user())):
-                  return Response(True,status=HTTP_202_ACCEPTED)  
-            return Response(data,status=HTTP_404_NOT_FOUND)
+            try:
+                  k, s = data.keys(), self.serializer_class(data=data)
+                  s.is_valid()
+                  if all(("username" in k, "password" in k, s.get_user(data))):
+                        return Response(True,status=HTTP_202_ACCEPTED)  
+                  raise Exception
+            except Exception as e:
+                  return Response({"Response":{"message":f"Error {e} \non load details","data":data}},status=HTTP_404_NOT_FOUND)
       
       @permission_classes(IsAuthenticated)
-      def update(self, request,username,password, key,val,*args, **kwargs):
+      @authentication_classes(SessionAuthentication)
+      def update(self, request,*args, **kwargs):
             data =request.resolver_match.kwargs
-            k, s = data.keys(), self.serializer_class(data=data)
-            s.is_valid()
-            if all(("username" in k, "password" in k,"key" in k, "val" in k ,s.get_user())):
-                  user =self.queryset.filter(username=data["username"]).first()
-                  user.__setattr__(key, val)
-                  user.save()
-                  return Response({"Result":f"{key.upper()} updated successfull"},status=HTTP_202_ACCEPTED)
+            try:
             
-            return Response(data,status=HTTP_400_BAD_REQUEST)
+                  k, s = data.keys(), self.serializer_class(data=data)
+                  s.is_valid()
+                  if all(("username" in k, "password" in k,"key" in k, "val" in k ,s.get_user(data))):
+                        user =self.queryset.filter(username=data["username"]).first()
+                        user.__setattr__(data["key"], data["val"])
+                        user.save()
+                        return Response({"Result":f"{data['key'].upper()} updated successfull"},status=HTTP_202_ACCEPTED)
+                  
+                  raise Exception
+            except Exception as e:
+                  return Response({"Response":{"message":f"Error {e} \non load details","data":data}},status=HTTP_404_NOT_FOUND)
+      
       
 
       @permission_classes(IsAdminUser)
       @authentication_classes(SessionAuthentication)
-      def delete(self, request,username,password, to_delete,*args, **kwargs):
+      def delete(self, request,*args, **kwargs):
             data =request.resolver_match.kwargs
+            to_delete=data["to_delete"]
             k, s = data.keys(), self.serializer_class(data=data)
             s.is_valid()
             l_todo=[]
             try:
-                  if all(("username" in k, "password" in k,"to_delete" in k ,s.get_user())):
+                  if all(("username" in k, "password" in k,"to_delete" in k ,s.get_user(data))):
                         if to_delete.find("&"):
                               l_todo.extend(to_delete.split("&"))
                         elif int(to_delete):
@@ -87,87 +91,19 @@ class GenericUsersViewSet(ModelViewSet):
                               except :
                                     res["not"].append(todo)
                                     pass
-                        return Response({"Result":{"selected":f"Users selected {l_todo} ","deleted success":f"Usesrs with id {res['done']} deleted successfull","Errors":f"User not deleted for some error {res['not']}"}},status=HTTP_202_ACCEPTED)
-            except Exception as e:
-                  print(e)   
-                  return Response(data,status=HTTP_400_BAD_REQUEST)
+                  return Response({"Result":{"selected":f"Users selected {l_todo} ","deleted success":f"Usesrs with id {res['done']} deleted successfull","Errors":f"User not deleted for some error {res['not']}"}},status=HTTP_202_ACCEPTED)
+            except Exception as e:  
+                  return Response({"Response":{"message":f"Error {e} \non load details","data":data}},status=HTTP_404_NOT_FOUND)
 
       @permission_classes(IsAdminUser)
       @authentication_classes(SessionAuthentication)
       def list(self, request,username,password,*args,**kwargs):
-            all_users=self.serializer_class(data=self.queryset,many=True)
-            all_users.is_valid()
-            return Response(all_users.data,status=HTTP_202_ACCEPTED)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-class UserView(CreateAPIView):
-      queryset = GuestUser.objects.all()
-      permission_classes = (UsersPermission,)
-      serializer_class = GuestUserSerializer
-      
-      def get(self, request, *args, **kwargs):
             try:
-                  data=request.resolver_match.kwargs
-                  k=data.keys()
-                  if any(("username" in k,"password" in k)) is not True  :
-                        raise ValueError("Url  didnot contain right data")
-                  
-                  valid = self.serializer_class(data=data).is_valid()
-                  if valid :
-                        s=self.serializer_class().create(data)
-                        s.save()
-                        return Response(valid,status=HTTP_201_CREATED)
-                  return Response(valid.data,status=HTTP_401_UNAUTHORIZED)
-            except ValueError as e:
-                  print(e)
-                  return Response(None)
-
-
-class LoginView(RetrieveAPIView):
-      
-      queryset = GuestUser.objects.all()
-      permission_classes = (UsersPermission,)#AllowAny,)
-      serializer_class = GuestUserSerializer
-      
-      def get(self, request, *args, **kwargs):
-            data =request.resolver_match.kwargs
-            if "username" in data.keys():
-                  u=self.serializer_class(data=data)
-                  u.is_valid()
-                  if  u.get_user(data):
-                        return Response({"user":u.initial_data})      
-            return Response({"user":data})
-      
-      
-      def post(self, request, *args, **kwargs):
-            
-            data =request.resolver_match.kwargs
-            if "username" in data.keys():
-                  u=self.serializer_class(data=data)
-                  u.is_valid()
-                  if  u.get_user(data):
-                        return HttpResponseRedirect('',{"user":u.initial_data},status=HTTP_202_ACCEPTED)  
-            return Response({"user":data},status=HTTP_200_OK)
-      
-
-            
-
+                  all_users=self.serializer_class(data=self.queryset,many=True)
+                  all_users.is_valid()
+                  return Response(all_users.data,status=HTTP_202_ACCEPTED)
+            except Exception as e:
+                  return Response({"Response":{"message":f"Error {e} \non load details","data":None}},status=HTTP_404_NOT_FOUND)
 
 
 

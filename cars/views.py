@@ -44,18 +44,17 @@ class CarViewSet(GenericViewSet):
 
       @permission_classes(IsAuthenticated)
       @action(detail=False, methods=["GET"],url_path="carsshop")
-      def shop(self,request, *args,**kwargs):
+      def carsshop(self,request, *args,**kwargs):
             try:
                   data=self.get_queryset()
                   s=self.serializer_class(data=data,many=True)
                   s.is_valid()
                   return Response(s.data, status=HTTP_200_OK )
             except Exception as e:
-                  print(e)
-                  return Response({"Response":"Error on load details"},status=HTTP_404_NOT_FOUND)
+                  return Response({"Response":f"Error {e} \non load details"},status=HTTP_404_NOT_FOUND)
 
       @action(detail=False, methods=["GET"], url_path="search")
-      def search_car(self,request,brand=None,date=None,price=None,ages=None,*args,**kwargs):
+      def search(self,request,brand=None,date=None,price=None,ages=None,*args,**kwargs):
             cars = self.queryset
             try:
                   data=request.resolver_match.kwargs
@@ -70,9 +69,9 @@ class CarViewSet(GenericViewSet):
                         cars = [car for car in cars if round(car.ages) in range(min_age,max_age)]
                   cars_json = self.serializer_class(cars,many=True)
                   return Response(cars_json.data, status=HTTP_200_OK)
+            
             except Exception as e:
-                  print(e)
-                  return Response({"Response":"Error on load details"},status=HTTP_404_NOT_FOUND)
+                  return Response({"Response":f"Error {e} \non load details"},status=HTTP_404_NOT_FOUND)
 
       @permission_classes([IsAdminUser,])
       @authentication_classes(SessionAuthentication)
@@ -88,8 +87,7 @@ class CarViewSet(GenericViewSet):
                         return Response(car.data, status=HTTP_200_OK)
                   raise Exception("User not authenticated")
             except Exception as e:
-                  print(e)
-                  return Response({"Response":"Error on load details"},status=HTTP_404_NOT_FOUND)
+                  return Response({"Response":f"Error {e} \non load details"},status=HTTP_404_NOT_FOUND)
             
       @permission_classes([IsAuthenticated,])
       @action(detail=True, methods=["POST"],url_path="buy")

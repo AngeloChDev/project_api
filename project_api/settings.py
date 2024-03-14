@@ -1,8 +1,13 @@
 from pathlib import Path
+from dotenv import load_dotenv
+import os
+env = load_dotenv('.env')
 BASE_DIR = Path(__file__).resolve().parent.parent
-SECRET_KEY = 'django-insecure-%%3g^eziv&fh=rl+y6yvs437z!_#hk2kk89y#w7g!1^tkiw2pw'
+#SECRET_KEY = 'django-insecure-%%3g^eziv&fh=rl+y6yvs437z!_#hk2kk89y#w7g!1^tkiw2pw'
+environ =os.environ
+SECRET_KEY= environ.get( 'SECRET_KEY' , 'SECRET_KEY')
 DEBUG = True
-ALLOWED_HOSTS = ["192.168.122.1", "127.0.0.1"]
+ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     
     #django main apps
@@ -97,7 +102,7 @@ CORS_ORIGIN_WHITELIST = (
     "http://localhost:8000",
     "http://localhost:8001",
 )
-CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "http://192.168.122.1:8000/"]
+CSRF_TRUSTED_ORIGINS = ["http://localhost:3000",]
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         
