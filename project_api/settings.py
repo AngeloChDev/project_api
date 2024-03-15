@@ -1,13 +1,22 @@
 from pathlib import Path
 from dotenv import load_dotenv
 import os
-env = load_dotenv('.env')
+
+
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+env_path = os.path.join(BASE_DIR, ".env")
+
+if os.path.isfile(env_path):
+    load_dotenv(env_path)
+
+
+
 #SECRET_KEY = 'django-insecure-%%3g^eziv&fh=rl+y6yvs437z!_#hk2kk89y#w7g!1^tkiw2pw'
 environ =os.environ
-SECRET_KEY= environ.get( 'SECRET_KEY' , 'SECRET_KEY')
-DEBUG = True
-ALLOWED_HOSTS = []
+SECRET_KEY= environ.get( 'SECRET_KEY' , 'django-insecure-%%3g^eziv&fh=rl+y6yvs437z!_#hk2kk89y#w7g!1^tkiw2pw')
+DEBUG =  os.environ.get("DJANGO_DEBUG", "") != "FALSE"
+ALLOWED_HOSTS =  os.environ.get("DJANGO_ALLOWED_HOSTS", "*").split(",")
 INSTALLED_APPS = [
     
     #django main apps
@@ -94,6 +103,23 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = 'static/'
+
+
+STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
+
+MEDIA_URL = "media/"
+MEDIA_ROOT = BASE_DIR / "uploads"
+LOGIN_REDIRECT_URL = "home"
+LOGOUT_REDIRECT_URL = "home"
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = "main_api.GuestUser"
